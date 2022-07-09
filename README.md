@@ -2,6 +2,8 @@
 
 Installation process:
 
+Python 3.10.4
+
 ```
 python -m venv venv
 ```

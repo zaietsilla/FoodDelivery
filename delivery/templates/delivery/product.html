@@ -1,0 +1,116 @@
+{% extends 'delivery/base.html' %}
+
+{% load static %}
+
+{% block title %} Food Delivery | {{item.title}} {% endblock %}
+
+{% block content %}
+    <!-- Catalog -->
+    <div class="wrapper wrapper-height">
+
+        <div class="product-option">
+            <div class="breadcrumb">
+                <a href="/">Головна</a>
+                <a href="/">{{shop.name}}</a>
+                <span>{{ item.title }}</span>
+            </div>
+        </div>
+
+        <div class="item">
+
+            <img src="{{ item.picture.url }}" alt="">
+
+            <div class="item-desc">
+                <h2>{{ item.title }}</h2>
+				
+
+                {% if item.ribbon == 1 %}
+                    <span class="tag discount">Знижка</span>
+                {% elif item.ribbon == 2 %}
+                    <span class="tag premium">Хіт продажів</span>
+                {% elif item.ribbon == 3 %}
+                    <span class="tag new">Новий</span>
+                {% endif %}
+
+
+                <!-- Price -->
+                <div class="item-price">{{item.price|floatformat:0}} грн</div>
+                <div class="item-static-price">{{item.price|floatformat:0}}</div>
+
+                <!-- Discount -->
+                {% if item.discount %}
+                    <div class="item-old-price">{{item.discount|floatformat:0}} грн</div>
+                    <div class="item-static-old-price">{{item.discount|floatformat:0}}</div>
+                {% else %}
+                    <div class="item-old-price" style="display:none;"></div>
+                    <div class="item-static-old-price"></div>
+                {% endif %}
+
+
+                <div class="item-quantity-control">
+                    <div class="quantity">
+                        <button class="quantity_button minus">−</button>
+                        <input class="quantity_input" type="number" name="" value="1" min="1" max="255">
+                        <button class="quantity_button plus">+</button>
+                    </div>
+					
+					{% if item.quantity == 0 %}
+						<input type="submit" value="Додати в кошик" class="add_to_cart myBtn" data-goods-id="{{item.id}}" style="background-color: #c1c1c1;" disabled>
+					{% else %}
+						<input type="submit" value="Додати в кошик" class="add_to_cart myBtn" data-goods-id="{{item.id}}">
+					{% endif %}
+
+                </div>
+
+                <p class="item-text-desc">{{ item.description | safe }}</p>
+
+                <br>
+
+                <div class="item-view-share">
+                    <div class="share-title">Поділитися:</div>
+
+                    <div class="social-wrapper">
+
+                        <a href="https://www.facebook.com/sharer.php?u="
+                           onclick="javascript:window.open(this.href+window.location.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                           target="_blank" rel="nofollow">
+                            <i class="fab fa-facebook-square"></i>
+                        </a>
+
+                        <a href="https://twitter.com/share?url="
+                           onclick="javascript:window.open(this.href+window.location.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                           target="_blank" rel="nofollow">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+
+                        <a href="viber://forward?text="
+                           onclick="javascript:window.open(this.href+window.location.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                           target="_blank" rel="nofollow">
+                            <i class="fab fa-viber"></i>
+                        </a>
+
+                        <a href="https://telegram.me/share/url?url="
+                           onclick="javascript:window.open(this.href+window.location.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                           target="_blank" rel="nofollow">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+
+    <script type="text/javascript" src="{% static 'js/modal.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/basket.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/checkout.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/product_count.js' %}"></script>
+
+{% endblock %}

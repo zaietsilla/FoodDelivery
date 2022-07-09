@@ -1,0 +1,184 @@
+{% extends 'delivery/base.html' %}
+
+{% load static %}
+
+{% block title %} Food Delivery | Оформлення замовлення {% endblock %}
+
+
+{% block content %}
+    <!-- Image Background -->
+    <div class="background_image">
+        <div class="content_wrapper">
+            <h1>Оформлення замовлення</h1>
+        </div>
+        <div class="image_wrapper" style="background-image: url({% static 'images/checkout.jpg' %});"></div>
+    </div>
+
+
+    <!-- Catalog -->
+    <div class="wrapper wrapper-height">
+
+        <h2 class="order-title">Номер замовлення: {{order_id}}</h2>
+
+        <div class="order-formation-wrapper">
+
+            <div class="order-details">
+                <div class="order-details-title">Введіть дані для доставки</div>
+
+                <form class="order-detaits-form" action="/create" method="post" id="order">
+
+                    {% csrf_token %}
+
+                    <input type="hidden" name="uuid" value="{{uuid}}">
+
+                    <div class="order-detaits-form-title req" id="first_name">
+                        <label>Ім'я<b style="color: #f44336;">*</b></label>
+                        <input type="text" name="name" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title req" id="phone">
+                        <label>Мобільний телефон<b style="color: #f44336;">*</b></label>
+                        <input type="tel" data-tel-input name="phone" maxlength="19" value="+380" class="input phone">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title req" id="city">
+                        <label>Місто<b style="color: #f44336;">*</b></label>
+                        <input type="text" name="city" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title req" id="street">
+                        <label>Вулиця<b style="color: #f44336;">*</b></label>
+                        <input type="text" name="street" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title req" id="house">
+                        <label>Будинок<b style="color: #f44336;">*</b></label>
+                        <input type="text" name="house" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title" id="apartment">
+                        <label>Квартира</label>
+                        <input type="text" name="apartment" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title" id="entrance">
+                        <label>Під'їзд</label>
+                        <input type="text" name="entrance" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title" id="code">
+                        <label>Код</label>
+                        <input type="text" name="code" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title" id="floor">
+                        <label>Поверх</label>
+                        <input type="text" name="floor" class="input">
+                        <span class="input-error"></span>
+                    </div>
+
+                    <b style="color: #f44336;"> Тестовий промокод: PROMO25</b>
+                    
+                    <div class="order-detaits-form-title">
+                        <label>Промокод</label>
+                        <input type="text" name="promo" class="input" placeholder="XXX-XXX-XXX" id="promo">
+                        <span class="input-error"></span>
+                    </div>
+
+
+                    <div class="order-detaits-form-title">
+                        <label>Комментар</label>
+                        <textarea name="comment" rows="4" placeholder="В цьому полі можна вказати своє побажання, коментар або додаткові дані для адресної доставки."></textarea>
+                    </div>
+
+
+                    <div class="order-detaits-form-title call">
+                        <p style="position: relative;">
+                            <input type="checkbox" name="flag" style="position: relative; top: 5px; left: 5px;">
+                            Мені не потрібно телефонувати. Я впевнений у своєму замовленні.
+                        </p>
+                    </div>
+
+
+                    <div class="submit" id="submit">
+                        <input type="submit" value="Замовлення підтверджую" class="add_to_cart" id="order-check">
+                    </div>
+                </form>
+            </div>
+
+            <div class="order-products">
+                <div class="order-products-title">Ваше замовлення</div>
+
+                <div class="order-products-list">
+
+                    {% for item in items %}
+
+                        <div class="product-item">
+                            <div class="product-item-top">
+                                <img src="{{item.1.url}}" alt="">
+                                <div class="product-item-name">{{item.0}}</div>
+                            </div>
+                            <div class="product-item-bottom">
+                                <div class="price">
+                                    <span>Ціна:</span>
+                                    <span>{{item.2|floatformat:0}} грн</span>
+                                </div>
+                                <div class="count">
+                                    <span>Кількість:</span>
+                                    <span>{{item.3}}</span>
+                                </div>
+                                <div class="amount">
+                                    <span>Сума:</span>
+                                    <span>{{item.4|floatformat:0}} грн</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="total-cost">
+                    <div class="products-total-cost" style="margin: 0;">
+                        <span>Всього до сплати:</span>
+                        <span id="total-cost">{{total|floatformat:0}} грн</span>
+                    </div>
+
+                    <div class="products-total-cost-promo" style="margin: 0;">
+                        <span>Ціна з промокодом:</span>
+                        <span id="total-cost-promo"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block script %}
+
+    <script type="text/javascript" src="{% static 'js/promo.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/basket.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/checkout.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/phone-mask.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/form_validation.js' %}"></script>
+
+{% endblock %}

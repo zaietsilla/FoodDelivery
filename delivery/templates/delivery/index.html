@@ -1,0 +1,102 @@
+{% extends 'delivery/base.html' %}
+
+{% load static %}
+
+{% block title %} Food Delivery {% endblock %}
+
+{% block content %}
+    <!-- Video Background -->
+    <div class="background_video">
+        <div class="align_content">
+            <div class="content_wrapper">
+                <p>Щоб ви хотіли поїсти?</p>
+                <h1>Food Delivery</h1>
+                <a class="buy_now" onclick="down();">Переглянути меню</a>
+            </div>
+        </div>
+        <div class="video_wrapper">
+            <video data-video-autoplay playsinline autoplay loop muted>
+                <source src="{% static 'video/video720.webm' %}" type="video/webm">
+                <source src="{% static 'video/video720.mp4' %}" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- Products -->
+    <div class="wrapper wrapper-height">
+
+        {% for shop in shops %}
+            
+            <h2 class="section-title">{{shop.name}}</h2>
+
+            <div class="products" id="products">
+
+                {% for product in products %}
+
+                    {% if product.shop.id  == shop.id %}
+                        <div class="product parent">
+
+
+                            {% if product.ribbon == 1 %}
+                                    <h4 class="ribbon discount">Знижка</h4>
+                            {% elif product.ribbon == 2 %}
+                                    <h4 class="ribbon premium">Хіт продажів</h4>
+                            {% elif product.ribbon == 3 %}
+                                    <h4 class="ribbon new">Новий</h4>
+                            {% endif %}
+
+
+                            <a href="/product/{{product.id}}" style="width: 100%; height: 100%;">
+                                <img src="{{product.picture.url}}" alt="" class="product_image">
+                            </a>
+
+                            <div class="product_detail">
+                                <a href="/product/{{product.id}}">
+                                    <div class="product_title">{{product.title}}</div>
+                                </a>
+
+                                <!-- Price -->
+                                <div class="product_price">{{product.price|floatformat:0}} грн</div>
+                                <div class="product_static_price">{{product.price|floatformat:0}}</div>
+
+                                <!-- Discount -->
+                                {% if product.discount %}
+                                        <div class="product_old_price">{{product.discount|floatformat:0}} грн</div>
+                                        <div class="product_static_old_price">{{product.discount|floatformat:0}}</div>
+                                {% else %}
+                                        <div class="product_old_price" style="display:none;"></div>
+                                        <div class="product_static_old_price"></div>
+                                {% endif %}
+
+                            </div>
+                            <div class="quantity">
+                                <button id="product_minus" class="quantity_button minus">−</button>
+                                <input id="quantity_input" class="quantity_input" type="number" name="" value="1" min="1" max="255">
+                                <button id="product_plus" class="quantity_button plus">+</button>
+                            </div>
+                                {% if product.quantity == 0 %}
+                                    <input type="submit" value="В кошик" class="add_to_cart myBtn" data-goods-id="{{product.id}}" style="background-color: #c1c1c1;" disabled>
+                                {% else %}
+                                    <input type="submit" value="В кошик" class="add_to_cart myBtn" data-goods-id="{{product.id}}">
+                                {% endif %}
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block script %}
+
+    <script type="text/javascript" src="{% static 'js/modal.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/products_count.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/basket.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/checkout.js' %}"></script>
+
+{% endblock %}
